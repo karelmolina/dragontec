@@ -5,6 +5,11 @@ import 'package:get_it/get_it.dart';
 import 'core/network/api_client.dart';
 import 'core/network/api_interceptors.dart';
 import 'core/network/network_info.dart';
+import 'features/agencias/data/datasources/agencias_remote_datasource.dart';
+import 'features/agencias/data/repositories/agencias_repository_impl.dart';
+import 'features/agencias/domain/repositories/agencias_repository.dart';
+import 'features/agencias/domain/usecases/get_agencias.dart';
+import 'features/agencias/presentation/bloc/agencias_bloc.dart';
 import 'features/auth/data/datasources/auth_local_datasource.dart';
 import 'features/auth/data/datasources/auth_remote_datasource.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
@@ -14,6 +19,12 @@ import 'features/auth/domain/usecases/get_current_user.dart';
 import 'features/auth/domain/usecases/login.dart';
 import 'features/auth/domain/usecases/logout.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/clientes/data/datasources/clientes_remote_datasource.dart';
+import 'features/clientes/data/repositories/clientes_repository_impl.dart';
+import 'features/clientes/domain/repositories/clientes_repository.dart';
+import 'features/clientes/domain/usecases/asignar_agencia_cliente.dart';
+import 'features/clientes/domain/usecases/registrar_cliente.dart';
+import 'features/clientes/presentation/bloc/clientes_bloc.dart';
 import 'features/usuarios/data/datasources/usuarios_remote_datasource.dart';
 import 'features/usuarios/data/repositories/usuarios_repository_impl.dart';
 import 'features/usuarios/domain/repositories/usuarios_repository.dart';
@@ -70,6 +81,26 @@ Future<void> initDependencies() async {
     () => UsuariosRepositoryImpl(remoteDataSource: sl()),
   );
 
+  // Clientes data sources
+  sl.registerLazySingleton<ClientesRemoteDataSource>(
+    () => ClientesRemoteDataSourceImpl(dio: sl<ApiClient>().dio),
+  );
+
+  // Clientes repositories
+  sl.registerLazySingleton<ClientesRepository>(
+    () => ClientesRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Agencias data sources
+  sl.registerLazySingleton<AgenciasRemoteDataSource>(
+    () => AgenciasRemoteDataSourceImpl(dio: sl<ApiClient>().dio),
+  );
+
+  // Agencias repositories
+  sl.registerLazySingleton<AgenciasRepository>(
+    () => AgenciasRepositoryImpl(remoteDataSource: sl()),
+  );
+
   // Use cases
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
@@ -78,6 +109,9 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => GetUsuariosUseCase(sl()));
   sl.registerLazySingleton(() => CreateUsuarioUseCase(sl()));
   sl.registerLazySingleton(() => UpdateUsuarioUseCase(sl()));
+  sl.registerLazySingleton(() => RegistrarClienteUseCase(sl()));
+  sl.registerLazySingleton(() => AsignarAgenciaUseCase(sl()));
+  sl.registerLazySingleton(() => GetAgenciasUseCase(sl()));
 
   // Blocs
   sl.registerFactory(
@@ -94,5 +128,14 @@ Future<void> initDependencies() async {
       createUsuarioUseCase: sl(),
       updateUsuarioUseCase: sl(),
     ),
+  );
+  sl.registerFactory(
+    () => ClientesBloc(
+      registrarClienteUseCase: sl(),
+      asignarAgenciaUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => AgenciasBloc(getAgenciasUseCase: sl()),
   );
 }

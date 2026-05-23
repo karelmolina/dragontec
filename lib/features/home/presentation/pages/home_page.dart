@@ -32,6 +32,11 @@ class HomePage extends StatelessWidget {
                     width: 60,
                     height: 60,
                     fit: BoxFit.contain,
+                    errorBuilder: (_, _, _) => const Icon(
+                      Icons.local_shipping,
+                      size: 60,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   const Text(
@@ -65,6 +70,31 @@ class HomePage extends StatelessWidget {
                 context.push(AppRoutes.usuarios);
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.business_outlined),
+              title: const Text('Agencias'),
+              onTap: () {
+                Navigator.of(context).pop();
+                context.push(AppRoutes.agencias);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.assignment_ind_outlined),
+              title: const Text('Asignar Agencia'),
+              onTap: () {
+                Navigator.of(context).pop();
+                context.push(AppRoutes.asignarAgencia);
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.person_add_outlined),
+              title: const Text('Registro de Cliente'),
+              onTap: () {
+                Navigator.of(context).pop();
+                context.push(AppRoutes.registroCliente);
+              },
+            ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.logout, color: AppColors.error),
@@ -80,61 +110,106 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Card(
-              child: InkWell(
-                onTap: () => context.push(AppRoutes.usuarios),
-                borderRadius: BorderRadius.circular(12),
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 56,
-                        height: 56,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.people_outline,
-                          color: AppColors.primary,
-                          size: 28,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Usuarios',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              'Gestionar usuarios, técnicos y consignatarios',
-                              style: TextStyle(
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Icon(Icons.chevron_right, color: AppColors.textTertiary),
-                    ],
-                  ),
-                ),
-              ),
+            _HomeCard(
+              title: 'Usuarios',
+              subtitle: 'Gestionar usuarios, técnicos y consignatarios',
+              icon: Icons.people_outline,
+              onTap: () => context.push(AppRoutes.usuarios),
+            ),
+            const SizedBox(height: 16),
+            _HomeCard(
+              title: 'Agencias',
+              subtitle: 'Consultar catálogo de agencias y filtrar',
+              icon: Icons.business_outlined,
+              onTap: () => context.push(AppRoutes.agencias),
+            ),
+            const SizedBox(height: 16),
+            _HomeCard(
+              title: 'Asignar Agencia',
+              subtitle: 'Asignar una agencia a su cuenta',
+              icon: Icons.assignment_ind_outlined,
+              onTap: () => context.push(AppRoutes.asignarAgencia),
+            ),
+            const SizedBox(height: 16),
+            _HomeCard(
+              title: 'Registro de Cliente',
+              subtitle: 'Crear una nueva cuenta de cliente',
+              icon: Icons.person_add_outlined,
+              onTap: () => context.push(AppRoutes.registroCliente),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _HomeCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Row(
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  icon,
+                  color: AppColors.primary,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: AppColors.textTertiary),
+            ],
+          ),
         ),
       ),
     );
