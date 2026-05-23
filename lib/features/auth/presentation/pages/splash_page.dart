@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../config/routes.dart';
+import '../../../../config/theme.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -33,27 +34,27 @@ class _SplashPageState extends State<SplashPage> {
           context.go(AppRoutes.login);
         }
       },
-      child: const Scaffold(
+      child: Scaffold(
+        backgroundColor: AppColors.primary,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.local_shipping_outlined,
-                size: 80,
-                color: Colors.deepPurple,
+              Image.asset(
+                'assets/images/logo-static.png',
+                width: 160,
+                height: 160,
+                fit: BoxFit.contain,
               ),
-              SizedBox(height: 24),
-              Text(
-                'Horus Logistic',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple,
+              const SizedBox(height: 32),
+              const SizedBox(
+                width: 40,
+                height: 40,
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  color: Colors.white,
                 ),
               ),
-              SizedBox(height: 24),
-              CircularProgressIndicator(),
             ],
           ),
         ),

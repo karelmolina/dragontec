@@ -10,11 +10,11 @@ void main() {
     await initDependencies();
   });
 
-  testWidgets('App renders splash screen', (WidgetTester tester) async {
+  testWidgets('App renders splash screen with logo', (WidgetTester tester) async {
     await tester.pumpWidget(const DragontecApp());
 
-    // Verify that the splash screen shows the app name.
-    expect(find.text('Horus Logistic'), findsOneWidget);
+    // Verify that the splash screen shows the logo and loading indicator.
+    expect(find.byType(Image), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }

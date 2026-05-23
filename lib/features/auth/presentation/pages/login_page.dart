@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../config/routes.dart';
+import '../../../../config/theme.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -41,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backgroundOffWhite,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
@@ -62,10 +64,18 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Icon(
-                        Icons.local_shipping_outlined,
-                        size: 80,
-                        color: Colors.deepPurple,
+                      Container(
+                        width: 160,
+                        height: 160,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(50),
+                        child: Image.asset(
+                          'assets/images/logo-static.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       const SizedBox(height: 24),
                       const Text(
@@ -74,14 +84,17 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Colors.deepPurple,
+                          color: AppColors.primary,
                         ),
                       ),
                       const SizedBox(height: 8),
                       const Text(
                         'Inicie sesión para continuar',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                       const SizedBox(height: 32),
                       TextFormField(
@@ -89,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: const InputDecoration(
                           labelText: 'Usuario',
                           prefixIcon: Icon(Icons.person_outline),
-                          border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -105,7 +117,6 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: const InputDecoration(
                           labelText: 'Contraseña',
                           prefixIcon: Icon(Icons.lock_outline),
-                          border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -125,8 +136,6 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: isLoading ? null : _onLogin,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
-                              backgroundColor: Colors.deepPurple,
-                              foregroundColor: Colors.white,
                             ),
                             child: isLoading
                                 ? const SizedBox(
