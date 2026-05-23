@@ -16,5 +16,8 @@ void main() {
     // Verify that the splash screen shows the logo and loading indicator.
     expect(find.byType(Image), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    // Allow the minimum splash delay timer to complete.
+    await tester.pump(const Duration(seconds: 2));
   });
 }
