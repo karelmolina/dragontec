@@ -14,6 +14,13 @@ import 'features/auth/domain/usecases/get_current_user.dart';
 import 'features/auth/domain/usecases/login.dart';
 import 'features/auth/domain/usecases/logout.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/usuarios/data/datasources/usuarios_remote_datasource.dart';
+import 'features/usuarios/data/repositories/usuarios_repository_impl.dart';
+import 'features/usuarios/domain/repositories/usuarios_repository.dart';
+import 'features/usuarios/domain/usecases/create_usuario.dart';
+import 'features/usuarios/domain/usecases/get_usuarios.dart';
+import 'features/usuarios/domain/usecases/update_usuario.dart';
+import 'features/usuarios/presentation/bloc/usuarios_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -53,11 +60,24 @@ Future<void> initDependencies() async {
     ),
   );
 
+  // Usuarios data sources
+  sl.registerLazySingleton<UsuariosRemoteDataSource>(
+    () => UsuariosRemoteDataSourceImpl(dio: sl<ApiClient>().dio),
+  );
+
+  // Usuarios repositories
+  sl.registerLazySingleton<UsuariosRepository>(
+    () => UsuariosRepositoryImpl(remoteDataSource: sl()),
+  );
+
   // Use cases
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
   sl.registerLazySingleton(() => GetCurrentUserUseCase(sl()));
   sl.registerLazySingleton(() => CheckAuthStatusUseCase(sl()));
+  sl.registerLazySingleton(() => GetUsuariosUseCase(sl()));
+  sl.registerLazySingleton(() => CreateUsuarioUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateUsuarioUseCase(sl()));
 
   // Blocs
   sl.registerFactory(
@@ -66,6 +86,13 @@ Future<void> initDependencies() async {
       logoutUseCase: sl(),
       getCurrentUserUseCase: sl(),
       checkAuthStatusUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => UsuariosBloc(
+      getUsuariosUseCase: sl(),
+      createUsuarioUseCase: sl(),
+      updateUsuarioUseCase: sl(),
     ),
   );
 }
