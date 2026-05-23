@@ -8,7 +8,7 @@ import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginResponse> login(LoginRequest request);
-  Future<void> logout();
+  Future<void> logout({String? bearerToken});
   Future<UserModel> getMe();
 }
 
@@ -48,10 +48,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> logout() async {
+  Future<void> logout({String? bearerToken}) async {
     try {
       final response = await dio.post<Map<String, dynamic>>(
         '${AppConstants.apiBaseUrl}/logout',
+        options: bearerToken != null
+            ? Options(
+                headers: {'Authorization': 'Bearer $bearerToken'},
+              )
+            : null,
       );
 
       if (response.statusCode != null &&
