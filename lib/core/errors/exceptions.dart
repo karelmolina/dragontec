@@ -34,3 +34,12 @@ class UnauthorizedException implements Exception {
   @override
   String toString() => 'UnauthorizedException: $message';
 }
+
+class ConfigException implements Exception {
+  final String message;
+
+  const ConfigException({required this.message});
+
+  @override
+  String toString() => 'ConfigException: $message';
+}
