@@ -10,6 +10,11 @@ import 'features/agencias/data/repositories/agencias_repository_impl.dart';
 import 'features/agencias/domain/repositories/agencias_repository.dart';
 import 'features/agencias/domain/usecases/get_agencias.dart';
 import 'features/agencias/presentation/bloc/agencias_bloc.dart';
+import 'features/alertas/data/datasources/alertas_remote_datasource.dart';
+import 'features/alertas/data/repositories/alertas_repository_impl.dart';
+import 'features/alertas/domain/repositories/alertas_repository.dart';
+import 'features/alertas/domain/usecases/create_alerta_paquete.dart';
+import 'features/alertas/presentation/bloc/alertas_bloc.dart';
 import 'features/auth/data/datasources/auth_local_datasource.dart';
 import 'features/auth/data/datasources/auth_remote_datasource.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
@@ -116,6 +121,16 @@ Future<void> initDependencies() async {
     () => TrackingRepositoryImpl(remoteDataSource: sl()),
   );
 
+  // Alertas data sources
+  sl.registerLazySingleton<AlertasRemoteDataSource>(
+    () => AlertasRemoteDataSourceImpl(dio: sl<ApiClient>().dio),
+  );
+
+  // Alertas repositories
+  sl.registerLazySingleton<AlertasRepository>(
+    () => AlertasRepositoryImpl(remoteDataSource: sl()),
+  );
+
   // Use cases
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
@@ -128,6 +143,7 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => AsignarAgenciaUseCase(sl()));
   sl.registerLazySingleton(() => GetAgenciasUseCase(sl()));
   sl.registerLazySingleton(() => GetTrackingByCourierUseCase(sl()));
+  sl.registerLazySingleton(() => CreateAlertaPaqueteUseCase(sl()));
 
   // Blocs
   sl.registerFactory(
@@ -156,5 +172,8 @@ Future<void> initDependencies() async {
   );
   sl.registerFactory(
     () => TrackingBloc(getTrackingByCourierUseCase: sl()),
+  );
+  sl.registerFactory(
+    () => AlertasBloc(createAlertaUseCase: sl()),
   );
 }

@@ -22,13 +22,20 @@ void main() {
   });
 
   const tTrackingCourier = '1ZJ73E770323663880';
-  final tPaqueteModel = PaqueteModel(
-    tracking: tTrackingCourier,
-    estado: 'En tránsito',
-    origen: 'Miami, FL',
-    destino: 'Ciudad de Guatemala',
-    fechaRegistro: DateTime(2024, 1, 15),
-    fechaEstimada: DateTime(2024, 1, 20),
+  const tPaqueteModel = PaqueteModel(
+    tracking: 'PKGNI00000000000117077',
+    estado: 'Recibido en Warehouse',
+    trackingCourier: tTrackingCourier,
+    agencia: 'PZ',
+    peso: 5,
+    flete: 'Aereo',
+    descripcion: 'ACCESORIO DE TELEFONO',
+    consignatario: 'Grupo Garza',
+    nombreCiudad: 'Managua',
+    nombrePais: 'Nicaragua',
+    fechaAlmacen: '2026-05-14 17:57:10',
+    colorEstado: 'bg-primary',
+    cantPieza: 1,
   );
   final tPaquete = tPaqueteModel.toEntity();
 

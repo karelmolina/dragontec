@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'config/routes.dart';
 import 'config/theme.dart';
 import 'features/agencias/presentation/bloc/agencias_bloc.dart';
+import 'features/alertas/presentation/bloc/alertas_bloc.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/clientes/presentation/bloc/clientes_bloc.dart';
+import 'features/tracking/presentation/bloc/tracking_bloc.dart';
 import 'features/usuarios/presentation/bloc/usuarios_bloc.dart';
 import 'injection_container.dart';
 
@@ -28,6 +30,12 @@ class DragontecApp extends StatelessWidget {
         ),
         BlocProvider<AgenciasBloc>(
           create: (_) => sl<AgenciasBloc>(),
+        ),
+        BlocProvider<AlertasBloc>(
+          create: (_) => sl<AlertasBloc>(),
+        ),
+        BlocProvider<TrackingBloc>(
+          create: (_) => sl<TrackingBloc>(),
         ),
       ],
       child: MaterialApp.router(

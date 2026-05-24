@@ -28,7 +28,7 @@ class TrackingRemoteDataSourceImpl implements TrackingRemoteDataSource {
       }
 
       final data = response.data!;
-      final dynamic packageData = data['data'];
+      final dynamic packageData = data['paquete'];
 
       if (packageData == null) {
         throw const NotFoundException(message: 'Paquete no encontrado');

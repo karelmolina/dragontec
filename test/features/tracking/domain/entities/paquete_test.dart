@@ -5,84 +5,149 @@ void main() {
   group('Paquete', () {
     test('debería crear una instancia con campos requeridos', () {
       const paquete = Paquete(
-        tracking: 'TRK123ABC',
-        estado: 'En tránsito',
+        tracking: 'PKGNI00000000000117077',
+        estado: 'Recibido en Warehouse',
+        trackingCourier: '1ZJ73E770323663880',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'ACCESORIO DE TELEFONO',
+        consignatario: 'Grupo Garza',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        colorEstado: 'bg-primary',
+        cantPieza: 1,
       );
 
-      expect(paquete.tracking, 'TRK123ABC');
-      expect(paquete.estado, 'En tránsito');
-      expect(paquete.origen, isNull);
-      expect(paquete.destino, isNull);
-      expect(paquete.fechaRegistro, isNull);
-      expect(paquete.fechaEstimada, isNull);
+      expect(paquete.tracking, 'PKGNI00000000000117077');
+      expect(paquete.estado, 'Recibido en Warehouse');
+      expect(paquete.trackingCourier, '1ZJ73E770323663880');
+      expect(paquete.agencia, 'PZ');
+      expect(paquete.peso, 5);
+      expect(paquete.flete, 'Aereo');
+      expect(paquete.descripcion, 'ACCESORIO DE TELEFONO');
+      expect(paquete.consignatario, 'Grupo Garza');
+      expect(paquete.nombreCiudad, 'Managua');
+      expect(paquete.nombrePais, 'Nicaragua');
+      expect(paquete.fechaAlmacen, isNull);
+      expect(paquete.colorEstado, 'bg-primary');
+      expect(paquete.cantPieza, 1);
     });
 
     test('debería crear una instancia con todos los campos', () {
-      final fechaRegistro = DateTime(2024, 1, 15);
-      final fechaEstimada = DateTime(2024, 1, 20);
-      final paquete = Paquete(
-        tracking: 'TRK456DEF',
-        estado: 'Entregado',
-        origen: 'Miami, FL',
-        destino: 'Ciudad de Guatemala',
-        fechaRegistro: fechaRegistro,
-        fechaEstimada: fechaEstimada,
+      const paquete = Paquete(
+        tracking: 'PKGNI00000000000117077',
+        estado: 'Recibido en Warehouse',
+        trackingCourier: '1ZJ73E770323663880',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'ACCESORIO DE TELEFONO',
+        consignatario: 'Grupo Garza',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        fechaAlmacen: '2026-05-14 17:57:10',
+        colorEstado: 'bg-primary',
+        cantPieza: 1,
       );
 
-      expect(paquete.tracking, 'TRK456DEF');
-      expect(paquete.estado, 'Entregado');
-      expect(paquete.origen, 'Miami, FL');
-      expect(paquete.destino, 'Ciudad de Guatemala');
-      expect(paquete.fechaRegistro, fechaRegistro);
-      expect(paquete.fechaEstimada, fechaEstimada);
+      expect(paquete.fechaAlmacen, '2026-05-14 17:57:10');
     });
 
     test('debería ser igual cuando todos los campos son iguales', () {
-      final fecha = DateTime(2024, 1, 15);
-      final paquete1 = Paquete(
+      const paquete1 = Paquete(
         tracking: 'TRK123',
         estado: 'En tránsito',
-        origen: 'Origen',
-        destino: 'Destino',
-        fechaRegistro: fecha,
-        fechaEstimada: fecha,
+        trackingCourier: 'COURIER123',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'Test',
+        consignatario: 'Test',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        colorEstado: 'bg-primary',
+        cantPieza: 1,
       );
-      final paquete2 = Paquete(
+      const paquete2 = Paquete(
         tracking: 'TRK123',
         estado: 'En tránsito',
-        origen: 'Origen',
-        destino: 'Destino',
-        fechaRegistro: fecha,
-        fechaEstimada: fecha,
+        trackingCourier: 'COURIER123',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'Test',
+        consignatario: 'Test',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        colorEstado: 'bg-primary',
+        cantPieza: 1,
       );
 
       expect(paquete1, equals(paquete2));
     });
 
     test('debería ser diferente cuando tracking cambia', () {
-      const paquete1 = Paquete(tracking: 'TRK123', estado: 'En tránsito');
-      const paquete2 = Paquete(tracking: 'TRK456', estado: 'En tránsito');
+      const paquete1 = Paquete(
+        tracking: 'TRK123',
+        estado: 'En tránsito',
+        trackingCourier: 'COURIER123',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'Test',
+        consignatario: 'Test',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        colorEstado: 'bg-primary',
+        cantPieza: 1,
+      );
+      const paquete2 = Paquete(
+        tracking: 'TRK456',
+        estado: 'En tránsito',
+        trackingCourier: 'COURIER123',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'Test',
+        consignatario: 'Test',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        colorEstado: 'bg-primary',
+        cantPieza: 1,
+      );
 
       expect(paquete1, isNot(equals(paquete2)));
     });
 
     test('debería ser diferente cuando estado cambia', () {
-      const paquete1 = Paquete(tracking: 'TRK123', estado: 'En tránsito');
-      const paquete2 = Paquete(tracking: 'TRK123', estado: 'Entregado');
-
-      expect(paquete1, isNot(equals(paquete2)));
-    });
-
-    test('debería ser diferente cuando origen cambia', () {
       const paquete1 = Paquete(
         tracking: 'TRK123',
         estado: 'En tránsito',
-        origen: 'A',
+        trackingCourier: 'COURIER123',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'Test',
+        consignatario: 'Test',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        colorEstado: 'bg-primary',
+        cantPieza: 1,
       );
       const paquete2 = Paquete(
         tracking: 'TRK123',
-        estado: 'En tránsito',
-        origen: 'B',
+        estado: 'Entregado',
+        trackingCourier: 'COURIER123',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'Test',
+        consignatario: 'Test',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        colorEstado: 'bg-primary',
+        cantPieza: 1,
       );
 
       expect(paquete1, isNot(equals(paquete2)));

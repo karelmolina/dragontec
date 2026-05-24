@@ -60,10 +60,18 @@ void main() {
       WidgetTester tester,
     ) async {
       const paquete = Paquete(
-        tracking: '1ZJ73E770323663880',
-        estado: 'En tránsito',
-        origen: 'Miami',
-        destino: 'Guatemala',
+        tracking: 'PKGNI00000000000117077',
+        estado: 'Recibido en Warehouse',
+        trackingCourier: '1ZJ73E770323663880',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'ACCESORIO DE TELEFONO',
+        consignatario: 'Grupo Garza',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        colorEstado: 'bg-primary',
+        cantPieza: 1,
       );
 
       when(mockBloc.state).thenReturn(const TrackingLoaded(paquete: paquete));
@@ -73,10 +81,11 @@ void main() {
 
       await tester.pumpWidget(createWidgetUnderTest());
 
+      expect(find.text('PKGNI00000000000117077'), findsOneWidget);
+      expect(find.text('Recibido en Warehouse'), findsOneWidget);
       expect(find.text('1ZJ73E770323663880'), findsOneWidget);
-      expect(find.text('Estado: En tránsito'), findsOneWidget);
-      expect(find.text('Origen: Miami'), findsOneWidget);
-      expect(find.text('Destino: Guatemala'), findsOneWidget);
+      expect(find.text('ACCESORIO DE TELEFONO'), findsOneWidget);
+      expect(find.text('Grupo Garza'), findsOneWidget);
     });
 
     testWidgets('debería mostrar mensaje cuando no se encuentra el paquete', (

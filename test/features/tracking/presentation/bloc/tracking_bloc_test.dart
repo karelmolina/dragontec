@@ -24,10 +24,18 @@ void main() {
 
   const tTrackingCourier = '1ZJ73E770323663880';
   const tPaquete = Paquete(
-    tracking: tTrackingCourier,
-    estado: 'En tránsito',
-    origen: 'Miami',
-    destino: 'Guatemala',
+    tracking: 'PKGNI00000000000117077',
+    estado: 'Recibido en Warehouse',
+    trackingCourier: tTrackingCourier,
+    agencia: 'PZ',
+    peso: 5,
+    flete: 'Aereo',
+    descripcion: 'ACCESORIO DE TELEFONO',
+    consignatario: 'Grupo Garza',
+    nombreCiudad: 'Managua',
+    nombrePais: 'Nicaragua',
+    colorEstado: 'bg-primary',
+    cantPieza: 1,
   );
 
   group('TrackingBloc', () {

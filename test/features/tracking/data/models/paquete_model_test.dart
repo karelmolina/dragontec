@@ -4,132 +4,185 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('PaqueteModel', () {
-    final tFechaRegistro = DateTime(2024, 1, 15, 10, 30);
-    final tFechaEstimada = DateTime(2024, 1, 20, 14, 0);
-
     test('debería deserializar desde JSON con todos los campos', () {
       final json = {
-        'tracking': '1ZJ73E770323663880',
-        'estado': 'En tránsito',
-        'origen': 'Miami, FL',
-        'destino': 'Ciudad de Guatemala',
-        'fecha_registro': '2024-01-15T10:30:00.000',
-        'fecha_estimada': '2024-01-20T14:00:00.000',
+        'tracking': 'PKGNI00000000000117077',
+        'estado': 'Recibido en Warehouse',
+        'tracking_courier': '1ZJ73E770323663880',
+        'agencia': 'PZ',
+        'peso': 5,
+        'flete': 'Aereo',
+        'descripcion': 'ACCESORIO DE TELEFONO',
+        'consignatario': 'Grupo Garza',
+        'nombre_ciudad': 'Managua',
+        'nombre_pais': 'Nicaragua',
+        'fecha_almacen': '2026-05-14 17:57:10',
+        'color_estado': 'bg-primary',
+        'cant_pieza': 1,
       };
 
       final model = PaqueteModel.fromJson(json);
 
-      expect(model.tracking, '1ZJ73E770323663880');
-      expect(model.estado, 'En tránsito');
-      expect(model.origen, 'Miami, FL');
-      expect(model.destino, 'Ciudad de Guatemala');
-      expect(model.fechaRegistro, tFechaRegistro);
-      expect(model.fechaEstimada, tFechaEstimada);
+      expect(model.tracking, 'PKGNI00000000000117077');
+      expect(model.estado, 'Recibido en Warehouse');
+      expect(model.trackingCourier, '1ZJ73E770323663880');
+      expect(model.agencia, 'PZ');
+      expect(model.peso, 5);
+      expect(model.flete, 'Aereo');
+      expect(model.descripcion, 'ACCESORIO DE TELEFONO');
+      expect(model.consignatario, 'Grupo Garza');
+      expect(model.nombreCiudad, 'Managua');
+      expect(model.nombrePais, 'Nicaragua');
+      expect(model.fechaAlmacen, '2026-05-14 17:57:10');
+      expect(model.colorEstado, 'bg-primary');
+      expect(model.cantPieza, 1);
     });
 
-    test('debería deserializar desde JSON con campos nulos', () {
+    test('debería deserializar desde JSON con campos nulos opcionales', () {
       final json = {
-        'tracking': 'TRK123',
+        'tracking': 'PKG123',
         'estado': 'Registrado',
       };
 
       final model = PaqueteModel.fromJson(json);
 
-      expect(model.tracking, 'TRK123');
+      expect(model.tracking, 'PKG123');
       expect(model.estado, 'Registrado');
-      expect(model.origen, isNull);
-      expect(model.destino, isNull);
-      expect(model.fechaRegistro, isNull);
-      expect(model.fechaEstimada, isNull);
-    });
-
-    test('debería usar valores por defecto cuando tracking y estado son nulos',
-        () {
-      final json = <String, dynamic>{};
-
-      final model = PaqueteModel.fromJson(json);
-
-      expect(model.tracking, '');
-      expect(model.estado, '');
+      expect(model.trackingCourier, '');
+      expect(model.agencia, '');
+      expect(model.peso, 0);
+      expect(model.flete, '');
+      expect(model.descripcion, '');
+      expect(model.consignatario, '');
+      expect(model.nombreCiudad, '');
+      expect(model.nombrePais, '');
+      expect(model.fechaAlmacen, isNull);
+      expect(model.colorEstado, '');
+      expect(model.cantPieza, 0);
     });
 
     test('debería serializar a JSON correctamente', () {
-      final model = PaqueteModel(
-        tracking: 'TRK456',
+      const model = PaqueteModel(
+        tracking: 'PKG123',
         estado: 'Entregado',
-        origen: 'Houston, TX',
-        destino: 'San Salvador',
-        fechaRegistro: tFechaRegistro,
-        fechaEstimada: tFechaEstimada,
+        trackingCourier: 'COURIER456',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'Test',
+        consignatario: 'Test Consignatario',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        fechaAlmacen: '2026-05-14 17:57:10',
+        colorEstado: 'bg-success',
+        cantPieza: 2,
       );
 
       final json = model.toJson();
 
-      expect(json['tracking'], 'TRK456');
+      expect(json['tracking'], 'PKG123');
       expect(json['estado'], 'Entregado');
-      expect(json['origen'], 'Houston, TX');
-      expect(json['destino'], 'San Salvador');
-      expect(json['fecha_registro'], tFechaRegistro.toIso8601String());
-      expect(json['fecha_estimada'], tFechaEstimada.toIso8601String());
+      expect(json['tracking_courier'], 'COURIER456');
+      expect(json['agencia'], 'PZ');
+      expect(json['peso'], 5);
+      expect(json['flete'], 'Aereo');
+      expect(json['descripcion'], 'Test');
+      expect(json['consignatario'], 'Test Consignatario');
+      expect(json['nombre_ciudad'], 'Managua');
+      expect(json['nombre_pais'], 'Nicaragua');
+      expect(json['fecha_almacen'], '2026-05-14 17:57:10');
+      expect(json['color_estado'], 'bg-success');
+      expect(json['cant_pieza'], 2);
     });
 
     test('debería serializar a JSON sin campos nulos', () {
       const model = PaqueteModel(
-        tracking: 'TRK789',
+        tracking: 'PKG789',
         estado: 'Pendiente',
+        trackingCourier: 'COURIER789',
+        agencia: 'PZ',
+        peso: 0,
+        flete: 'Maritimo',
+        descripcion: '',
+        consignatario: '',
+        nombreCiudad: '',
+        nombrePais: '',
+        colorEstado: '',
+        cantPieza: 0,
       );
 
       final json = model.toJson();
 
-      expect(json['tracking'], 'TRK789');
-      expect(json['estado'], 'Pendiente');
-      expect(json.containsKey('origen'), isFalse);
-      expect(json.containsKey('destino'), isFalse);
-      expect(json.containsKey('fecha_registro'), isFalse);
-      expect(json.containsKey('fecha_estimada'), isFalse);
+      expect(json.containsKey('fecha_almacen'), isFalse);
     });
 
     test('toEntity debería retornar una entidad Paquete equivalente', () {
-      final model = PaqueteModel(
-        tracking: 'TRK999',
+      const model = PaqueteModel(
+        tracking: 'PKG999',
         estado: 'En tránsito',
-        origen: 'Origen',
-        destino: 'Destino',
-        fechaRegistro: tFechaRegistro,
-        fechaEstimada: tFechaEstimada,
+        trackingCourier: 'COURIER999',
+        agencia: 'PZ',
+        peso: 5,
+        flete: 'Aereo',
+        descripcion: 'Test',
+        consignatario: 'Test',
+        nombreCiudad: 'Managua',
+        nombrePais: 'Nicaragua',
+        colorEstado: 'bg-primary',
+        cantPieza: 1,
       );
 
       final entity = model.toEntity();
 
       expect(entity, isA<Paquete>());
-      expect(entity.tracking, 'TRK999');
+      expect(entity.tracking, 'PKG999');
       expect(entity.estado, 'En tránsito');
-      expect(entity.origen, 'Origen');
-      expect(entity.destino, 'Destino');
-      expect(entity.fechaRegistro, tFechaRegistro);
-      expect(entity.fechaEstimada, tFechaEstimada);
+      expect(entity.trackingCourier, 'COURIER999');
+      expect(entity.agencia, 'PZ');
+      expect(entity.peso, 5);
+      expect(entity.flete, 'Aereo');
+      expect(entity.descripcion, 'Test');
+      expect(entity.consignatario, 'Test');
+      expect(entity.nombreCiudad, 'Managua');
+      expect(entity.nombrePais, 'Nicaragua');
+      expect(entity.colorEstado, 'bg-primary');
+      expect(entity.cantPieza, 1);
     });
 
     test('toEntity roundtrip: fromJson -> toEntity debería preservar datos',
         () {
       final json = {
-        'tracking': 'RT123',
+        'tracking': 'PKGRT123',
         'estado': 'Entregado',
-        'origen': 'OrigenX',
-        'destino': 'DestinoX',
-        'fecha_registro': '2024-06-01T08:00:00.000',
-        'fecha_estimada': '2024-06-05T16:00:00.000',
+        'tracking_courier': 'COURIERRT',
+        'agencia': 'PZ',
+        'peso': 10,
+        'flete': 'Maritimo',
+        'descripcion': 'Roundtrip test',
+        'consignatario': 'Test',
+        'nombre_ciudad': 'Managua',
+        'nombre_pais': 'Nicaragua',
+        'fecha_almacen': '2026-01-01 10:00:00',
+        'color_estado': 'bg-success',
+        'cant_pieza': 3,
       };
 
       final model = PaqueteModel.fromJson(json);
       final entity = model.toEntity();
 
-      expect(entity.tracking, 'RT123');
+      expect(entity.tracking, 'PKGRT123');
       expect(entity.estado, 'Entregado');
-      expect(entity.origen, 'OrigenX');
-      expect(entity.destino, 'DestinoX');
-      expect(entity.fechaRegistro, DateTime(2024, 6, 1, 8));
-      expect(entity.fechaEstimada, DateTime(2024, 6, 5, 16));
+      expect(entity.trackingCourier, 'COURIERRT');
+      expect(entity.agencia, 'PZ');
+      expect(entity.peso, 10);
+      expect(entity.flete, 'Maritimo');
+      expect(entity.descripcion, 'Roundtrip test');
+      expect(entity.consignatario, 'Test');
+      expect(entity.nombreCiudad, 'Managua');
+      expect(entity.nombrePais, 'Nicaragua');
+      expect(entity.fechaAlmacen, '2026-01-01 10:00:00');
+      expect(entity.colorEstado, 'bg-success');
+      expect(entity.cantPieza, 3);
     });
   });
 }
