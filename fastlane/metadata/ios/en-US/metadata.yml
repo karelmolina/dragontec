@@ -1,0 +1,25 @@
+title: Horus Logistic Mobile
+subtitle: Gestión logística integral
+description: |
+  Horus Logistic Mobile es la aplicación oficial para la gestión integral
+  de operaciones logísticas. Gestiona usuarios, tracking de paquetes,
+  alertas y agencias desde tu dispositivo iOS.
+
+  Características:
+  • Autenticación segura
+  • Gestión de usuarios y roles
+  • Tracking de paquetes en tiempo real
+  • Alertas de paquetes entrantes
+  • Soporte multiplataforma
+
+  Requiere cuenta activa en Horus Logistic.
+keywords:
+  - logistic
+  - tracking
+  - packages
+  - shipping
+  - delivery
+  - horus
+changelog: |
+  Versión 1.0.0:
+  • Lanzamiento inicial

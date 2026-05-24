@@ -1,0 +1,5 @@
+// Dev configuration for Horus Logistic Mobile
+// This file is used by the Dev scheme
+
+APP_NAME=Horus Logistic QA
+APP_BUNDLE_ID=com.dragontec.horuslogistic.dev

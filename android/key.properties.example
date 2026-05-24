@@ -1,0 +1,8 @@
+# Android Release Signing Configuration
+# IMPORTANTE: NUNCA commitear este archivo con valores reales.
+# Copiar a android/key.properties y rellenar con los datos del keystore.
+
+storePassword=YOUR_STORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=horus_logistic
+storeFile=horus_logistic.keystore

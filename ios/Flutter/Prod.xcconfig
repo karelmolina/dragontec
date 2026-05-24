@@ -1,0 +1,5 @@
+// Production configuration for Horus Logistic Mobile
+// This file is used by the Prod scheme
+
+APP_NAME=Horus Logistic
+APP_BUNDLE_ID=com.dragontec.horuslogistic

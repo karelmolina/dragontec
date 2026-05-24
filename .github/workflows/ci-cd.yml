@@ -1,0 +1,128 @@
+name: CI/CD — Horus Logistic Mobile
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  FLUTTER_VERSION: '3.24.0'
+
+jobs:
+  analyze-and-test:
+    name: 🔍 Analyze & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🎯 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🔍 Analyze code
+        run: flutter analyze --fatal-infos
+
+      - name: 🧪 Run tests
+        run: flutter test --coverage
+
+      - name: 📊 Upload coverage to Codecov
+        if: github.event_name == 'push'
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
+
+  build-android:
+    name: 🤖 Build Android
+    runs-on: ubuntu-latest
+    needs: analyze-and-test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🎯 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: 🎯 Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🔐 Decode keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/horus_logistic.keystore
+
+      - name: 📝 Create key.properties
+        run: |
+          cat > android/key.properties <<EOF
+          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
+          storeFile=horus_logistic.keystore
+          EOF
+
+      - name: 🏗️ Build App Bundle (Production)
+        run: |
+          flutter build appbundle \
+            --release \
+            --flavor prod \
+            --dart-define=ENV=prod \
+            --obfuscate \
+            --split-debug-info=symbols/
+
+      - name: 📤 Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: build/app/outputs/bundle/prodRelease/app-prod-release.aab
+
+  build-ios:
+    name: 🍎 Build iOS
+    runs-on: macos-latest
+    needs: analyze-and-test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🎯 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🏗️ Build iOS (Production)
+        run: |
+          flutter build ios \
+            --release \
+            --no-codesign \
+            --dart-define=ENV=prod \
+            --obfuscate \
+            --split-debug-info=symbols/
+
+      - name: 📤 Upload iOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-release
+          path: build/ios/iphoneos/Runner.app

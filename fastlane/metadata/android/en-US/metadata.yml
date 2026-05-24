@@ -1,0 +1,84 @@
+title: Horus Logistic Mobile
+short_title: Horus Logistic
+subtitle: Gestión logística integral para tu empresa
+description: |
+  Horus Logistic Mobile es la aplicación oficial de Horus Logistic para la gestión
+  integral de operaciones logísticas. Diseñada para administradores, técnicos,
+  consignatarios y usuarios de agencia.
+
+  CARACTERÍSTICAS PRINCIPALES:
+  • Autenticación segura con tokens Sanctum
+  • Gestión completa de usuarios y roles
+  • Registro de clientes y asignación de agencias
+  • Tracking de paquetes en tiempo real
+  • Creación de alertas de paquetes entrantes
+  • Soporte multiplataforma: Android, iOS, Web, Desktop
+
+  SEGURIDAD:
+  • Almacenamiento seguro de tokens
+  • Manejo robusto de errores y conectividad
+  • Ofuscación de código en producción
+
+  Horus Logistic Mobile te permite mantener el control total de tus operaciones
+  logísticas desde cualquier lugar, en cualquier momento.
+
+  Nota: Requiere cuenta activa en Horus Logistic.
+full_description: |
+  Horus Logistic Mobile es la solución móvil completa para la gestión de
+  operaciones logísticas. Desarrollada para el ecosistema Horus Logistic,
+  esta aplicación permite a los usuarios gestionar todos los aspectos de
+  sus operaciones desde un único lugar.
+
+  FUNCIONALIDADES DESTACADAS:
+
+  👥 GESTIÓN DE USUARIOS
+  • Crear y administrar usuarios con diferentes roles
+  • Control de permisos por rol (Admin, Técnico, Consignatario, Agencia)
+  • Reset de contraseñas y gestión de estados
+
+  📦 TRACKING DE PAQUETES
+  • Consulta el estado de tus paquetes por número de tracking
+  • Visualización detallada de información de envíos
+  • Historial completo de movimientos
+
+  🔔 ALERTAS DE PAQUETES
+  • Crea alertas para paquetes entrantes
+  • Notificaciones en tiempo real
+  • Gestión de fletes y couriers
+
+  🏢 AGENCIAS Y CLIENTES
+  • Registro de nuevos clientes
+  • Asignación de agencias
+  • Catálogo completo de agencias con búsqueda y filtros
+
+  🌐 MULTIPLATAFORMA
+  • Disponible en Android, iOS, Web, Linux, macOS y Windows
+  • Sincronización en tiempo real
+  • Modo offline con cacheo de datos
+
+  REQUISITOS:
+  • Conexión a Internet para sincronización
+  • Cuenta activa en Horus Logistic
+  • Android 5.0+ o iOS 13.0+
+
+  SOPORTE:
+  Para soporte técnico, contacta a nuestro equipo en:
+  soporte@horus-logistic.com
+
+  © 2026 Dragontec. Todos los derechos reservados.
+keywords:
+  - logistic
+  - tracking
+  - packages
+  - shipping
+  - delivery
+  - warehouse
+  - horus
+  - freight
+changelog: |
+  Versión 1.0.0:
+  • Lanzamiento inicial
+  • Autenticación y gestión de usuarios
+  • Tracking de paquetes
+  • Alertas de paquetes
+  • Gestión de agencias y clientes

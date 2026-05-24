@@ -1,0 +1,95 @@
+name: Deploy — Release
+
+on:
+  release:
+    types: [published]
+
+env:
+  FLUTTER_VERSION: '3.24.0'
+
+jobs:
+  deploy-android:
+    name: 🚀 Deploy Android to Play Store
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🎯 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: 🎯 Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🔐 Decode keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/horus_logistic.keystore
+
+      - name: 📝 Create key.properties
+        run: |
+          cat > android/key.properties <<EOF
+          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
+          storeFile=horus_logistic.keystore
+          EOF
+
+      - name: 🏗️ Build App Bundle
+        run: |
+          flutter build appbundle \
+            --release \
+            --flavor prod \
+            --dart-define=ENV=prod \
+            --obfuscate \
+            --split-debug-info=symbols/
+
+      - name: 🚀 Upload to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT }}
+          packageName: com.dragontec.horuslogistic
+          releaseFiles: build/app/outputs/bundle/prodRelease/app-prod-release.aab
+          track: production
+
+  deploy-ios:
+    name: 🚀 Deploy iOS to App Store
+    runs-on: macos-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🎯 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: flutter pub get
+
+      - name: 🏗️ Build iOS
+        run: |
+          flutter build ipa \
+            --release \
+            --dart-define=ENV=prod \
+            --obfuscate \
+            --split-debug-info=symbols/
+
+      - name: 🚀 Upload to App Store Connect
+        uses: apple-actions/upload-testflight-build@v1
+        with:
+          app-path: build/ios/ipa/*.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
