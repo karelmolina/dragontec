@@ -105,15 +105,6 @@ class HomePage extends StatelessWidget {
             ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.person_add_outlined),
-            title: const Text('Registro de Cliente'),
-            onTap: () {
-              Navigator.of(context).pop();
-              context.push(AppRoutes.registroCliente);
-            },
-          ),
-          const Divider(),
-          ListTile(
             leading: const Icon(Icons.logout, color: AppColors.error),
             title: const Text(
               'Cerrar sesión',
@@ -161,13 +152,6 @@ class HomePage extends StatelessWidget {
       ));
       cards.add(const SizedBox(height: 16));
     }
-
-    cards.add(_HomeCard(
-      title: 'Registro de Cliente',
-      subtitle: 'Crear una nueva cuenta de cliente',
-      icon: Icons.person_add_outlined,
-      onTap: () => context.push(AppRoutes.registroCliente),
-    ));
 
     return cards;
   }

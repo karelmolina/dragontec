@@ -49,7 +49,6 @@ class User extends Equatable {
   bool get canViewAgencias => true; // Todos los roles autenticados
   bool get canAsignarAgencia =>
       isAdmin || isTecnico || isConsignatario || isUsuario || isCliente;
-  bool get canRegistrarCliente => true; // Público, pero autenticados también pueden acceder
 
   @override
   List<Object?> get props => [id, nombre, usuario, correo, telefono, rol, status];

@@ -2,22 +2,21 @@ import 'package:go_router/go_router.dart';
 
 import '../core/widgets/role_guard.dart';
 import '../features/agencias/presentation/pages/agencias_page.dart';
+import '../features/alertas/presentation/pages/crear_alerta_page.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/splash_page.dart';
-import '../features/clientes/presentation/pages/registro_cliente_page.dart';
 import '../features/home/presentation/pages/home_page.dart';
 import '../features/tracking/presentation/pages/tracking_page.dart';
 import '../features/usuarios/presentation/pages/usuario_form_page.dart';
-import '../features/usuarios/presentation/pages/usuarios_list_page.dart';
 
 abstract final class AppRoutes {
   static const String splash = '/';
   static const String login = '/login';
   static const String home = '/home';
   static const String crearUsuario = '/crear-usuario';
-  static const String registroCliente = '/registro-cliente';
   static const String agencias = '/agencias';
   static const String tracking = '/tracking';
+  static const String crearAlerta = '/crear-alerta';
 }
 
 final GoRouter appRouter = GoRouter(
@@ -43,10 +42,6 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
     GoRoute(
-      path: AppRoutes.registroCliente,
-      builder: (context, state) => const RegistroClientePage(),
-    ),
-    GoRoute(
       path: AppRoutes.agencias,
       builder: (context, state) => const AgenciasPage(),
     ),
@@ -56,6 +51,10 @@ final GoRouter appRouter = GoRouter(
         title: 'Tracking',
         child: const TrackingPage(),
       ),
+    ),
+    GoRoute(
+      path: AppRoutes.crearAlerta,
+      builder: (context, state) => const CrearAlertaPage(),
     ),
   ],
 );

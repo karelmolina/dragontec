@@ -153,11 +153,6 @@ class _LoginPageState extends State<LoginPage> {
                           );
                         },
                       ),
-                      const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: () => context.push(AppRoutes.registroCliente),
-                        child: const Text('¿No tiene cuenta? Regístrese aquí'),
-                      ),
                     ],
                   ),
                 ),
