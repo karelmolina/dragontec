@@ -126,7 +126,7 @@ void main() {
       expect(find.text('Error de conexión'), findsOneWidget);
     });
 
-    testWidgets('debería validar campos requeridos al enviar', (
+    testWidgets('debería validar que la fecha es requerida al enviar', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(createWidgetUnderTest());
@@ -138,20 +138,24 @@ void main() {
       await tester.tap(button);
       await tester.pumpAndSettle();
 
-      expect(find.text('El nombre del cliente es obligatorio'), findsOneWidget);
-      expect(find.text('El tracking es obligatorio'), findsOneWidget);
-      expect(find.text('Seleccione un courier'), findsOneWidget);
-      expect(find.text('Seleccione una agencia'), findsOneWidget);
-      expect(find.text('Seleccione un tipo de alerta'), findsOneWidget);
-      expect(find.text('Seleccione un tipo de flete'), findsOneWidget);
-      expect(find.text('La cantidad de piezas es obligatoria'), findsOneWidget);
-      expect(find.text('La descripción es obligatoria'), findsOneWidget);
+      // La primera validación es que la fecha no sea null
+      expect(find.text('Seleccione una fecha de llegada'), findsOneWidget);
     });
 
     testWidgets(
         'debería enviar evento CreateAlerta cuando todos los campos son válidos',
         (WidgetTester tester) async {
       await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpAndSettle();
+
+      // Seleccionar fecha (tap en el campo de fecha)
+      await tester.tap(find.byIcon(Icons.calendar_today));
+      await tester.pumpAndSettle();
+      // Tap en el día 15 del calendario
+      await tester.tap(find.text('15'));
+      await tester.pumpAndSettle();
+      // Tap en OK
+      await tester.tap(find.text('OK'));
       await tester.pumpAndSettle();
 
       // Llenar nombre

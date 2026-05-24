@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dragontec/features/tracking/domain/entities/paquete.dart';
 import 'package:dragontec/features/tracking/presentation/bloc/tracking_bloc.dart';
 import 'package:dragontec/features/tracking/presentation/bloc/tracking_event.dart';
@@ -153,8 +155,12 @@ void main() {
 
       await tester.pumpWidget(createWidgetUnderTest());
 
+      // Dar focus al TextField y enviar acción de búsqueda
+      await tester.tap(find.byType(TextField));
+      await tester.pump();
       await tester.testTextInput.receiveAction(TextInputAction.search);
       await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
 
       expect(find.text('El número de tracking es obligatorio'), findsOneWidget);
       verifyNever(mockBloc.add(any));
@@ -181,13 +187,12 @@ void main() {
     testWidgets('debería reintentar búsqueda al presionar Reintentar', (
       WidgetTester tester,
     ) async {
-      when(mockBloc.state).thenReturn(
-        const TrackingError(message: 'Error de conexión'),
-      );
+      // Crear un stream controller para poder emitir múltiples estados
+      final streamController = StreamController<TrackingState>.broadcast();
+
+      when(mockBloc.state).thenReturn(const TrackingInitial());
       when(mockBloc.stream).thenAnswer(
-        (_) => Stream.value(
-          const TrackingError(message: 'Error de conexión'),
-        ),
+        (_) => streamController.stream,
       );
 
       await tester.pumpWidget(createWidgetUnderTest());
@@ -195,7 +200,22 @@ void main() {
       const trackingNumber = '1ZJ73E770323663880';
       await tester.enterText(find.byType(TextField), trackingNumber);
       await tester.pump();
+      await tester.testTextInput.receiveAction(TextInputAction.search);
+      await tester.pump();
 
+      // Simular que la búsqueda fue exitosa (setea _lastTracking)
+      streamController.add(const TrackingLoading());
+      await tester.pump();
+
+      // Simular error
+      when(mockBloc.state).thenReturn(
+        const TrackingError(message: 'Error de conexión'),
+      );
+      streamController.add(const TrackingError(message: 'Error de conexión'));
+      await tester.pump();
+
+      // Ahora el botón Reintentar debería estar visible
+      clearInteractions(mockBloc);
       await tester.tap(find.text('Reintentar'));
       await tester.pump();
 
@@ -206,6 +226,8 @@ void main() {
           trackingNumber,
         ),
       ))).called(1);
+
+      await streamController.close();
     });
   });
 }
