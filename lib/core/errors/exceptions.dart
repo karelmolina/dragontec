@@ -43,3 +43,12 @@ class ConfigException implements Exception {
   @override
   String toString() => 'ConfigException: $message';
 }
+
+class NotFoundException implements Exception {
+  final String message;
+
+  const NotFoundException({this.message = 'Recurso no encontrado'});
+
+  @override
+  String toString() => 'NotFoundException: $message';
+}

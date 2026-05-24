@@ -37,7 +37,7 @@ class AgenciasRemoteDataSourceImpl implements AgenciasRemoteDataSource {
       if (nombre != null && nombre.isNotEmpty) queryParameters['nombre'] = nombre;
 
       final response = await dio.get(
-        '${AppConstants.apiBaseUrl}/agencias',
+        '/agencias',
         queryParameters: queryParameters,
       );
 
@@ -48,10 +48,17 @@ class AgenciasRemoteDataSourceImpl implements AgenciasRemoteDataSource {
       final dynamic data = response.data;
       final List<dynamic> items;
 
-      if (data is Map<String, dynamic> &&
-          data.containsKey('data') &&
-          data['data'] is List) {
-        items = data['data'] as List;
+      if (data is Map<String, dynamic>) {
+        // La respuesta real tiene: { "agencias": { "data": [...] } }
+        if (data.containsKey('agencias') &&
+            data['agencias'] is Map<String, dynamic> &&
+            data['agencias']['data'] is List) {
+          items = data['agencias']['data'] as List;
+        } else if (data.containsKey('data') && data['data'] is List) {
+          items = data['data'] as List;
+        } else {
+          items = [];
+        }
       } else if (data is List) {
         items = data;
       } else {

@@ -33,3 +33,7 @@ class ValidationFailure extends Failure {
   @override
   List<Object?> get props => [message, errors];
 }
+
+class TrackingNotFoundFailure extends Failure {
+  const TrackingNotFoundFailure({super.message = 'Paquete no encontrado.'});
+}

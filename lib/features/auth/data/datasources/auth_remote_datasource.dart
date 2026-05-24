@@ -8,7 +8,7 @@ import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginResponse> login(LoginRequest request);
-  Future<void> logout({String? bearerToken});
+  Future<void> logout();
   Future<UserModel> getMe();
 }
 
@@ -21,7 +21,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<LoginResponse> login(LoginRequest request) async {
     try {
       final response = await dio.post<Map<String, dynamic>>(
-        '${AppConstants.apiBaseUrl}/login',
+        '/login',
         data: request.toJson(),
       );
 
@@ -48,15 +48,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> logout({String? bearerToken}) async {
+  Future<void> logout() async {
     try {
       final response = await dio.post<Map<String, dynamic>>(
-        '${AppConstants.apiBaseUrl}/logout',
-        options: bearerToken != null
-            ? Options(
-                headers: {'Authorization': 'Bearer $bearerToken'},
-              )
-            : null,
+        '/logout',
       );
 
       if (response.statusCode != null &&
@@ -78,7 +73,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel> getMe() async {
     try {
       final response = await dio.get<Map<String, dynamic>>(
-        '${AppConstants.apiBaseUrl}/me',
+        '/me',
       );
 
       if (response.data == null) {
@@ -88,7 +83,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
 
-      return UserModel.fromJson(response.data!);
+      final userData = response.data!['user'];
+      if (userData == null || userData is! Map<String, dynamic>) {
+        throw const ServerException(
+          message: 'Respuesta inválida del servidor: falta user',
+          statusCode: 500,
+        );
+      }
+
+      return UserModel.fromJson(userData);
     } on DioException catch (e) {
       throw _handleDioError(e);
     }

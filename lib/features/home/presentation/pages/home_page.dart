@@ -4,72 +4,87 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../config/routes.dart';
 import '../../../../config/theme.dart';
+import '../../../auth/domain/entities/user.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inicio'),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset(
-                    'assets/images/logo-static.png',
-                    width: 60,
-                    height: 60,
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, _, _) => const Icon(
-                      Icons.local_shipping,
-                      size: 60,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Horus Logistic',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Text(
-                    'Sistema de gestión',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        final user = state is AuthAuthenticated ? state.user : null;
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Inicio'),
+          ),
+          drawer: _buildDrawer(context, user),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: _buildCards(context, user),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Drawer _buildDrawer(BuildContext context, User? user) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          UserAccountsDrawerHeader(
+            decoration: const BoxDecoration(
+              color: AppColors.primary,
+            ),
+            currentAccountPicture: Image.asset(
+              'assets/images/logo-static.png',
+              fit: BoxFit.contain,
+              errorBuilder: (_, _, _) => const CircleAvatar(
+                backgroundColor: Colors.white24,
+                child: Icon(
+                  Icons.local_shipping,
+                  color: Colors.white,
+                ),
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.home_outlined),
-              title: const Text('Inicio'),
-              onTap: () => Navigator.of(context).pop(),
+            accountName: Text(
+              user?.nombre ?? 'Invitado',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            accountEmail: Text(
+              user != null
+                  ? '@${user.usuario} · ${user.rolNombre}'
+                  : 'No autenticado',
+              style: const TextStyle(
+                color: Colors.white70,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home_outlined),
+            title: const Text('Inicio'),
+            onTap: () => Navigator.of(context).pop(),
+          ),
+          if (user?.canManageUsuarios ?? false)
             ListTile(
-              leading: const Icon(Icons.people_outline),
-              title: const Text('Usuarios'),
+              leading: const Icon(Icons.person_add_outlined),
+              title: const Text('Crear Usuario'),
               onTap: () {
                 Navigator.of(context).pop();
-                context.push(AppRoutes.usuarios);
+                context.push(AppRoutes.crearUsuario);
               },
             ),
+          if (user?.canViewAgencias ?? true)
             ListTile(
               leading: const Icon(Icons.business_outlined),
               title: const Text('Agencias'),
@@ -78,74 +93,83 @@ class HomePage extends StatelessWidget {
                 context.push(AppRoutes.agencias);
               },
             ),
+
+          if (user?.canViewTracking ?? false)
             ListTile(
-              leading: const Icon(Icons.assignment_ind_outlined),
-              title: const Text('Asignar Agencia'),
+              leading: const Icon(Icons.local_shipping_outlined),
+              title: const Text('Tracking'),
               onTap: () {
                 Navigator.of(context).pop();
-                context.push(AppRoutes.asignarAgencia);
+                context.push(AppRoutes.tracking);
               },
             ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.person_add_outlined),
-              title: const Text('Registro de Cliente'),
-              onTap: () {
-                Navigator.of(context).pop();
-                context.push(AppRoutes.registroCliente);
-              },
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.person_add_outlined),
+            title: const Text('Registro de Cliente'),
+            onTap: () {
+              Navigator.of(context).pop();
+              context.push(AppRoutes.registroCliente);
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.logout, color: AppColors.error),
+            title: const Text(
+              'Cerrar sesión',
+              style: TextStyle(color: AppColors.error),
             ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.logout, color: AppColors.error),
-              title: const Text(
-                'Cerrar sesión',
-                style: TextStyle(color: AppColors.error),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                context.read<AuthBloc>().add(const LogoutRequested());
-              },
-            ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _HomeCard(
-              title: 'Usuarios',
-              subtitle: 'Gestionar usuarios, técnicos y consignatarios',
-              icon: Icons.people_outline,
-              onTap: () => context.push(AppRoutes.usuarios),
-            ),
-            const SizedBox(height: 16),
-            _HomeCard(
-              title: 'Agencias',
-              subtitle: 'Consultar catálogo de agencias y filtrar',
-              icon: Icons.business_outlined,
-              onTap: () => context.push(AppRoutes.agencias),
-            ),
-            const SizedBox(height: 16),
-            _HomeCard(
-              title: 'Asignar Agencia',
-              subtitle: 'Asignar una agencia a su cuenta',
-              icon: Icons.assignment_ind_outlined,
-              onTap: () => context.push(AppRoutes.asignarAgencia),
-            ),
-            const SizedBox(height: 16),
-            _HomeCard(
-              title: 'Registro de Cliente',
-              subtitle: 'Crear una nueva cuenta de cliente',
-              icon: Icons.person_add_outlined,
-              onTap: () => context.push(AppRoutes.registroCliente),
-            ),
-          ],
-        ),
+            onTap: () {
+              Navigator.of(context).pop();
+              context.read<AuthBloc>().add(const LogoutRequested());
+            },
+          ),
+        ],
       ),
     );
+  }
+
+  List<Widget> _buildCards(BuildContext context, User? user) {
+    final cards = <Widget>[];
+
+    if (user?.canManageUsuarios ?? false) {
+      cards.add(_HomeCard(
+        title: 'Crear Usuario',
+        subtitle: 'Crear nuevos usuarios, técnicos y consignatarios',
+        icon: Icons.person_add_outlined,
+        onTap: () => context.push(AppRoutes.crearUsuario),
+      ));
+      cards.add(const SizedBox(height: 16));
+    }
+
+    if (user?.canViewAgencias ?? true) {
+      cards.add(_HomeCard(
+        title: 'Agencias',
+        subtitle: 'Consultar catálogo de agencias y filtrar',
+        icon: Icons.business_outlined,
+        onTap: () => context.push(AppRoutes.agencias),
+      ));
+      cards.add(const SizedBox(height: 16));
+    }
+
+    if (user?.canViewTracking ?? false) {
+      cards.add(_HomeCard(
+        title: 'Tracking',
+        subtitle: 'Consultar estado de paquetes',
+        icon: Icons.local_shipping_outlined,
+        onTap: () => context.push(AppRoutes.tracking),
+      ));
+      cards.add(const SizedBox(height: 16));
+    }
+
+    cards.add(_HomeCard(
+      title: 'Registro de Cliente',
+      subtitle: 'Crear una nueva cuenta de cliente',
+      icon: Icons.person_add_outlined,
+      onTap: () => context.push(AppRoutes.registroCliente),
+    ));
+
+    return cards;
   }
 }
 

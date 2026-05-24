@@ -19,7 +19,7 @@ class UsuariosRemoteDataSourceImpl implements UsuariosRemoteDataSource {
   Future<List<UsuarioModel>> getUsuarios({int page = 1, int perPage = 10}) async {
     try {
       final response = await dio.get<Map<String, dynamic>>(
-        '${AppConstants.apiBaseUrl}/usuarios',
+        '/usuarios',
         queryParameters: {'page': page, 'per_page': perPage},
       );
 
@@ -50,7 +50,7 @@ class UsuariosRemoteDataSourceImpl implements UsuariosRemoteDataSource {
   Future<UsuarioModel> createUsuario(UsuarioModel usuario) async {
     try {
       final response = await dio.post<Map<String, dynamic>>(
-        '${AppConstants.apiBaseUrl}/usuarios',
+        '/usuarios',
         data: usuario.toJson(),
       );
 
@@ -72,7 +72,7 @@ class UsuariosRemoteDataSourceImpl implements UsuariosRemoteDataSource {
 
     try {
       final response = await dio.post<Map<String, dynamic>>(
-        '${AppConstants.apiBaseUrl}/usuarios',
+        '/usuarios',
         data: usuario.toJson(),
       );
 

@@ -18,7 +18,7 @@ class UserModel extends User {
         correo: json['correo'] as String?,
         telefono: json['telefono'] as String?,
         rol: json['rol'] as int? ?? 0,
-        status: json['status'] as int? ?? 0,
+        status: json['status'] as int? ?? 1,
       );
 
   Map<String, dynamic> toJson() => {

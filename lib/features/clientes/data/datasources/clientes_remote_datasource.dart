@@ -31,7 +31,7 @@ class ClientesRemoteDataSourceImpl implements ClientesRemoteDataSource {
   }) async {
     try {
       final response = await dio.post<Map<String, dynamic>>(
-        '${AppConstants.apiBaseUrl}/clientes/registro',
+        '/clientes/registro',
         data: {
           'nombre': nombre,
           'usuario': usuario,
@@ -55,7 +55,7 @@ class ClientesRemoteDataSourceImpl implements ClientesRemoteDataSource {
   Future<void> asignarAgencia({required int idAgencia}) async {
     try {
       final response = await dio.put<Map<String, dynamic>>(
-        '${AppConstants.apiBaseUrl}/clientes/agencia',
+        '/clientes/agencia',
         data: {'id_agencia': idAgencia},
       );
 

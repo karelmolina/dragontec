@@ -76,12 +76,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(const AuthLoading());
 
-    final result = await logoutUseCase(const NoParams());
+    await logoutUseCase(const NoParams());
 
-    result.fold(
-      (failure) => emit(AuthError(failure.message)),
-      (_) => emit(const AuthUnauthenticated()),
-    );
+    // Siempre desloguear localmente, incluso si la petición HTTP falla
+    // (token expirado, sin conexión, etc.)
+    emit(const AuthUnauthenticated());
   }
 
   Future<void> _onCheckAuthStatusRequested(
