@@ -4,9 +4,6 @@ on:
   release:
     types: [published]
 
-env:
-  FLUTTER_VERSION: '3.24.0'
-
 jobs:
   deploy-android:
     name: 🚀 Deploy Android to Play Store
@@ -15,11 +12,15 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
+      - name: 📖 Read FVM config
+        uses: kuhnroyal/flutter-fvm-config-action@v2
+        id: fvm-config
+
       - name: 🎯 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: 'stable'
+          flutter-version: ${{ steps.fvm-config.outputs.FLUTTER_VERSION }}
+          channel: ${{ steps.fvm-config.outputs.FLUTTER_CHANNEL }}
           cache: true
 
       - name: 🎯 Setup Java
@@ -68,11 +69,15 @@ jobs:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
+      - name: 📖 Read FVM config
+        uses: kuhnroyal/flutter-fvm-config-action@v2
+        id: fvm-config
+
       - name: 🎯 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: 'stable'
+          flutter-version: ${{ steps.fvm-config.outputs.FLUTTER_VERSION }}
+          channel: ${{ steps.fvm-config.outputs.FLUTTER_CHANNEL }}
           cache: true
 
       - name: 📦 Get dependencies

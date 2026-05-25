@@ -22,11 +22,15 @@ jobs:
       - name: 📥 Checkout
         uses: actions/checkout@v4
 
+      - name: 📖 Read FVM config
+        uses: kuhnroyal/flutter-fvm-config-action@v2
+        id: fvm-config
+
       - name: 🎯 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
-          channel: 'stable'
+          flutter-version: ${{ steps.fvm-config.outputs.FLUTTER_VERSION }}
+          channel: ${{ steps.fvm-config.outputs.FLUTTER_CHANNEL }}
           cache: true
 
       - name: 📦 Get dependencies

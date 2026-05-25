@@ -49,6 +49,10 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
+# FVM
+.fvm/*
+!.fvm/fvm_config.json
+
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
