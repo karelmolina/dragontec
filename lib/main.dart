@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -16,8 +15,8 @@ const String _environment = String.fromEnvironment(
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Inicializar Firebase (solo en plataformas soportadas)
-  if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+  // Inicializar Firebase (solo en plataformas nativas, no web)
+  if (!kIsWeb) {
     try {
       await FirebaseService().initialize();
     } catch (_) {
