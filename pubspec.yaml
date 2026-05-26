@@ -107,9 +107,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    # NOTA: Los archivos .env NO se incluyen como assets.
-    # Las variables de entorno se inyectan via --dart-define en CI/CD.
-    # Ver: docs/demo-github-pages.md
     - assets/images/
 
   # To add assets to your application, add an assets section, like this:
